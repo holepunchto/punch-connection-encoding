@@ -38,3 +38,31 @@ test('bootstrap array', (t) => {
   t.is(decoded.bootstrap[1].host, '128.0.0.1')
   t.is(decoded.bootstrap[1].port, 8081)
 })
+
+test('bootstrap empty array', (t) => {
+  t.plan(3)
+
+  const publicKey = Buffer.alloc(32)
+  const encoded = c.encode(punchConnection, { publicKey, bootstrap: [] })
+
+  t.ok(encoded)
+
+  const decoded = c.decode(punchConnection, encoded)
+
+  t.ok(Buffer.compare(publicKey, decoded.publicKey) === 0)
+  t.is(decoded.bootstrap.length, 0)
+})
+
+test('bootstrap undefined array', (t) => {
+  t.plan(3)
+
+  const publicKey = Buffer.alloc(32)
+  const encoded = c.encode(punchConnection, { publicKey })
+
+  t.ok(encoded)
+
+  const decoded = c.decode(punchConnection, encoded)
+
+  t.ok(Buffer.compare(publicKey, decoded.publicKey) === 0)
+  t.is(decoded.bootstrap.length, 0)
+})
